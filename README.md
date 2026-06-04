@@ -22,3 +22,62 @@ Pertempuran yang terasa dinamis dengan adanya partikel peluru proyektil, puluhan
 Kamera game bergerak secara halus menggunakan efek redaman (easing damping) mengikuti posisi pemain. Visual game juga dioptimalkan menggunakan teknik Frustum Culling (hanya menggambar objek yang terlihat di layar) serta sistem layering masking untuk menciptakan efek bayangan siluet pada peta.
 6. Dynamic Level Progression
 Game mendukung transisi antar-level otomatis menggunakan efek lingkaran (circular transition) yang akan memuat map berbeda setiap kali pemain berhasil menyapu bersih seluruh musuh di area tersebut.
+
+Cara menjalankan project (langkah menjalankan)
+1. Mulai Level 
+2. Hancurkan Semua Enemy dengan Dash (X)
+Jalan & Lompat Menuju Ubin Spawners/Portal 
+Kamu tidak bisa langsung masuk portal begitu saja. Kamu harus memanfaatkan kelincahan gerakan untuk menghindari tembakan senapan musuh, lalu menabrak mereka dengan Dash sampai daftar musuh di map kosong (len(enemies) == 0). 
+3. Level Terbuka 
+4. Hitbox Player Menyentuh Portal 
+Setelah area map aman dan bersih dari musuh, kamu tinggal menggerakkan karakter berjalan atau melompat menuju koordinat ubin spawners (Portal) yang sudah kamu letakkan di ujung peta saat mendesainnya di Level Editor. 
+5. Pindah ke File map.json Berikutnya 
+Begitu kotak fisik karaktermu menabrak kotak portal tersebut, program game akan langsung menutup map saat ini, membaca file data JSON berikutnya, dan kamu pun masuk ke tantangan baru.
+
+Penerapan Pilar Utama PBO
+1. Class dan Object (Kelas dan Objek)
+Class adalah cetak biru (blueprint) atau kerangka kerja, sedangkan Object adalah wujud nyata yang dibuat berdasarkan blueprint tersebut. 
+a. Class
+class Game:
+class Editor:
+class Cloud:
+class Clouds:
+class PhysicsEntity:
+class Enemy(PhysicsEntity):
+class Player(PhysicsEntity):
+class Particle:
+class Spark:
+class Tilemap:
+class Animation:
+
+b. Object
+Game().run()
+Editor().run()
+
+2. Inheritance (Pewarisan) 
+Sebuah kelas anak (subclass) dapat mewarisi seluruh properti (atribut) dan perilaku (method) dari kelas induk (superclass). Ini mencegah penulisan kode yang berulang (code redundancy). 
+a. Superclass
+PhysicsEntity yang menampung semua logika umum fisika (posisi, ukuran, kecepatan, gravitasi, dan deteksi tabrakan ubin). 
+b. Subclass
+Player dan Enemy mewarisi kemampuan PhysicsEntity
+class Enemy(PhysicsEntity):
+   #konstruktor
+   def __init__(self, game, pos, size):
+       super().__init__(game, 'enemy', pos, size)
+
+class Player(PhysicsEntity):
+   #konstruktor
+   def __init__(self, game, pos, size):
+       super().__init__(game, 'player', pos, size)
+
+3. Polymorphism (Polimorfisme) 
+Konsep di mana beberapa kelas memiliki method dengan nama yang sama, tetapi cara kerja atau perilakunya berbeda (Overriding). 
+Baik kelas PhysicsEntity, Player, maupun Enemy sama-sama memiliki method def update() dan def render().
+Ketika game memanggil player.update(), yang diproses adalah input keyboard dan mekanik dash. Namun, ketika game memanggil enemy.update(), yang berjalan adalah AI patroli mendeteksi jurang dan logika menembak.
+Mereka tetap memanfaatkan kode induknya dengan memanggil super().update(), lalu menimpanya (override) dengan logika unik masing-masing di bawahnya.
+
+4. Encapsulation (Pengkapsulan) 
+Membungkus data (atribut) dan fungsi (method) menjadi satu kesatuan unit di dalam kelas, serta menyembunyikan detail proses internal dari luar. 
+Seluruh status pemain (seperti self.air_time, self.jumps, self.dashing) dikapsulkan di dalam class Player. 
+Dunia luar atau kelas lain tidak boleh mengubah koordinat posisi pemain secara sembarangan. Jika ingin menggerakkan pemain, kelas lain harus berinteraksi lewat method yang sudah disediakan, yaitu update(tilemap, movement).
+
