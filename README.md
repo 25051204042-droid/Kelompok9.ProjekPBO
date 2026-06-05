@@ -81,3 +81,4 @@ Membungkus data (atribut) dan fungsi (method) menjadi satu kesatuan unit di dala
 Seluruh status pemain (seperti self.air_time, self.jumps, self.dashing) dikapsulkan di dalam class Player. 
 Dunia luar atau kelas lain tidak boleh mengubah koordinat posisi pemain secara sembarangan. Jika ingin menggerakkan pemain, kelas lain harus berinteraksi lewat method yang sudah disediakan, yaitu update(tilemap, movement).
 
+<img width="960" height="766" alt="Screenshot 2026-06-04 231244" src="https://github.com/user-attachments/assets/22980b04-70d5-4808-9d13-42b23164d6d9" />
