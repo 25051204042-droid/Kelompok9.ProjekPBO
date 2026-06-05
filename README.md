@@ -81,4 +81,44 @@ Membungkus data (atribut) dan fungsi (method) menjadi satu kesatuan unit di dala
 Seluruh status pemain (seperti self.air_time, self.jumps, self.dashing) dikapsulkan di dalam class Player. 
 Dunia luar atau kelas lain tidak boleh mengubah koordinat posisi pemain secara sembarangan. Jika ingin menggerakkan pemain, kelas lain harus berinteraksi lewat method yang sudah disediakan, yaitu update(tilemap, movement).
 
+5. Abstraction (Abstraksi)
+a. Abstraksi Pengelolaan Peta (Tilemap) 
+Detail yang disembunyikan: Logika pembacaan file cetak biru berbasis json (data/maps/), algoritma ekstraksi koordinat ubin solid, pembatasan dinding pembatas, serta kalkulasi viewport kamera saat proses rendering dunia game.
+
+self.tilemap.load('data/maps/' + str(map_id) + '.json')
+self.tilemap.render(self.display, offset=render_scroll)
+
+Kelas Game cukup memanggil perintah sederhana berikut untuk merakit dan menampilkan seluruh isi peta.
+b. Abstraksi Objek dan Entitas (Player & Enemy) 
+Detail yang disembunyikan: Kalkulasi vektor fisika seperti gaya gravitasi, waktu melayang di udara, akselerasi kecepatan lari, penanganan hitbox deteksi tabrakan, serta patroli musuh. 
+
+self.player.update(self.tilemap, (self.movement[1] - self.movement[0], 0))
+enemy.update(self.tilemap, (0, 0))
+
+Di dalam Game Loop, pusat kendali cukup memicu pergerakan karakter menggunakan satu baris perintah eksekusi tanpa perlu tahu bagaimana otot internal karakter bekerja. 
+c. Abstraksi Latar Belakang dan Lingkungan (Clouds) 
+Detail yang disembunyikan: Rumus matematika efek gerak semu latar belakang, pengacakan properti visual menggunakan modul random, serta rumus sisa bagi atau modulo (%) untuk melakukan manipulasi teleportasi koordinat gambar agar awan tidak habis.
+
+self.clouds.update()
+self.clouds.render(self.display_2, offset=render_scroll)
+
+Kelas Clouds menyembunyikan semua kerumitan tersebut sehingga Game Loop cukup memanggil perintah pembaruan visual secara instan
+d. Abstraksi Modul Utilitas (Animation & Gambar)   
+Detail yang Disembunyikan: Manipulasi sistem operasi untuk membaca file system laptop, proses penghapusan latar warna hitam menjadi transparan (set_colorkey), serta pembagian indeks waktu internal (stopwatch frame) untuk menahan pergantian gambar agar animasi berjalan halus. 
+
+'player/run': Animation(load_images('entities/player/run'), img_dur=4),
+
+Objek luar tinggal mendaftarkan alamat folder dan memanggil fungsi pembungkus yang telah disediakan.
+
+
 <img width="960" height="766" alt="Screenshot 2026-06-04 231244" src="https://github.com/user-attachments/assets/22980b04-70d5-4808-9d13-42b23164d6d9" />
+Gambar Level 0
+
+<img width="962" height="762" alt="Screenshot 2026-06-04 231329" src="https://github.com/user-attachments/assets/70d4f2bd-f67b-406f-bf2f-27a6fa2d1f01" />
+Gambar Level 1
+
+<img width="967" height="760" alt="Screenshot 2026-06-04 231634" src="https://github.com/user-attachments/assets/3916261c-3053-4328-9177-676f12c969a8" />
+Gambar Level 2
+
+<img width="959" height="770" alt="Screenshot 2026-06-04 231932" src="https://github.com/user-attachments/assets/ac5e200d-b27b-441d-a35b-93f1fe89b07e" />
+Gambar Menang
